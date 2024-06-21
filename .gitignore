@@ -1,0 +1,9 @@
+bin/
+obj/
+*.exe
+*.o
+*.dll
+*.so
+*.a
+test
+wrnlb
