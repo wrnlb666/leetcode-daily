@@ -60,7 +60,6 @@ class TreeNode:
                 node: Self = cls(right)
                 parent.right = node
                 queue.append(node)
-
         return root
 
 
