@@ -20,7 +20,7 @@ class TreeNode:
         while len(nodes) != 0:
             curr: Optional[Self] = nodes.popleft()
             if curr == None:
-                res.append("null")
+                res.append("None")
                 continue
             res.append(curr.val)
             if curr.left != None:
@@ -31,7 +31,7 @@ class TreeNode:
                 if curr.left == None:
                     nodes.append(None)
                 nodes.append(curr.right)
-        while res[-1] == "null":
+        while res[-1] == "None":
             res.pop(-1)
         return str(res)
 
@@ -65,85 +65,43 @@ class TreeNode:
 
 class Solution:
     def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
-        ancestor: Optional[TreeNode] = self.find_lca(root, startValue, destValue)
-        path_start: List[int] = [0]
-        path_dest: List[str] = [""]
-        self.dfs_start(ancestor, path_start, startValue)
-        self.dfs_dest(ancestor, path_dest, destValue)
+        if root == None:
+            return ""
 
-        return 'U' * path_start[0] + path_dest[0]
+        p1: List[str] = [""]
+        p2: List[str] = [""]
+
+        self.find_path(root, p1, startValue)
+        self.find_path(root, p2, destValue)
+
+        s1: str = p1[0]
+        s2: str = p2[0]
+
+        while s1 and s2 and s1[-1] == s2[-1]:
+            s1 = s1[:-1]
+            s2 = s2[:-1]
+
+        return 'U' * (len(s1)) + s2[::-1]
 
     
-    def dfs_start(self, root: Optional[TreeNode], path: List[int], target: int) -> bool:
-        if root == None:
-            return False
-
+    def find_path(self, root: TreeNode, path: List[str], target: int) -> bool:
         if root.val == target:
             return True
 
-        path[0] += 1
-        
-        if self.dfs_start(root.left, path, target) or self.dfs_start(root.right, path, target):
+        if root.left and self.find_path(root.left, path, target):
+            path[0] += 'L'
             return True
 
-        path[0] -= 1
-        return False
-
-    
-    def dfs_dest(self, root: Optional[TreeNode], path: List[str], target: int) -> bool:
-        if root == None:
-            return False
-
-        if root.val == target:
+        if root.right and self.find_path(root.right, path, target):
+            path[0] += 'R'
             return True
 
-        path[0] += 'L'
-        if self.dfs_dest(root.left, path, target):
-            return True
-        path[0] = path[0][0:-1]
-
-        path[0] += 'R'
-        if self.dfs_dest(root.right, path, target):
-            return True
-        path[0] = path[0][0:-1]
-
-        return False
-
-    
-    def find_lca(self, root: Optional[TreeNode], n1: int, n2: int) -> Optional[TreeNode]:
-        p1: List[TreeNode] = []
-        p2: List[TreeNode] = []
-
-        if not self.find_path(root, p1, n1) or not self.find_path(root, p2, n2):
-            return None
-
-        i: int = 0
-        while i < len(p1) and i < len(p2) and p1[i] == p2[i]:
-            i += 1
-
-        return p1[i - 1]
-
-
-    def find_path(self, root: Optional[TreeNode], path: List[TreeNode], target: int) -> bool:
-        if root == None:
-            # reach end but finds nothing
-            return False
-
-        path.append(root)
-
-        if root.val == target:
-            # finds target
-            return True
-
-        if self.find_path(root.left, path, target) or self.find_path(root.right, path, target):
-            return True
-
-        path.pop()
         return False
 
 
 def main() -> None:
-    root: TreeNode = TreeNode.from_list([5, 1, 2, 3, None, 6, 4])
+    lst: List[Optional[int]] = [5,1,2,3,None,6,4]
+    root: TreeNode = TreeNode.from_list(lst)
     startValue: int = 3
     destValue: int = 6
 
