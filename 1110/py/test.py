@@ -69,44 +69,37 @@ class Solution:
         res: List[TreeNode] = []
         if root == None:
             return res
-        curr: bool = False
-        if root.val in delete_set:
-            curr = True
-        else:
+
+        if root.val not in delete_set:
             res.append(root)
 
-        if root.left:
-            self.bfs(root.left, delete_set, res, root, True, curr)
-        if root.right:
-            self.bfs(root.right, delete_set, res, root, False, curr)
-
+        queue: Deque[TreeNode] = deque([root])
+        while queue:
+            node: TreeNode = queue.popleft()
+            deleted: bool = False
+            if node.val in delete_set:
+                deleted = True
+                    
+            if node.left:
+                queue.append(node.left)
+                if node.left.val in delete_set:
+                    node.left = None
+                elif deleted:
+                    res.append(node.left)
+            if node.right:
+                queue.append(node.right)
+                if node.right.val in delete_set:
+                    node.right = None
+                elif deleted:
+                    res.append(node.right)
 
         return res
 
 
-    def bfs(self, root: TreeNode, to_delete: Set[int], res: List[TreeNode], parent: TreeNode, is_left: bool, parent_deleted: bool) -> None:
-        curr: bool = False
-
-        if root.val in to_delete:
-            curr = True
-            if is_left:
-                parent.left = None
-            else:
-                parent.right = None
-        else:
-            if parent_deleted:
-                res.append(root)
-
-        if root.left:
-            self.bfs(root.left, to_delete, res, root, True, curr)
-        if root.right:
-            self.bfs(root.right, to_delete, res, root, False, curr)
-
-
 def main():
-    lst: List[Optional[int]] = [1,2,3,4,5,6,7]
+    lst: List[Optional[int]] = [1,2,None,4,3]
     root: TreeNode = TreeNode.from_list(lst)
-    to_delete: List[int] = [3,5]
+    to_delete: List[int] = [2,3]
     
     res: List[TreeNode] = Solution().delNodes(root, to_delete)
     print(res)
