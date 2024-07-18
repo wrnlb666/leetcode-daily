@@ -2,7 +2,7 @@ from typing import Optional, Self, List, Deque
 from collections import deque
 
 
-# Definition for a binary tree node.
+null: None = None
 class TreeNode:
     def __init__(self,
                  val: int = 0,
