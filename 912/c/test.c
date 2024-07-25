@@ -3,36 +3,49 @@
 #include <string.h>
 
 
-#define swap(a, b) \
-do { \
-    int t = a; \
-    a = b; \
-    b = t; \
-} while (0)
+void merge(int* arr, int left, int mid, int right) {
+    int l1 = mid - left + 1;
+    int l2 = right - mid;
 
+    int larr[l1];
+    int rarr[l2];
 
-int partition(int* arr, int low, int high) {
-    int pivot = arr[high];
-    int i = low;
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            swap(arr[i], arr[j]);
-            i++;
+    memcpy(larr, &arr[left], sizeof (int) * l1);
+    memcpy(rarr, &arr[mid + 1], sizeof (int) * l2);
+
+    int i = 0;
+    int j = 0;
+    int index = left;
+    while (i < l1 && j < l2) {
+        if (larr[i] <= rarr[j]) {
+            arr[index] = larr[i];
+            i += 1;
+        } else if (larr[i] > rarr[j]) {
+            arr[index] = rarr[j];
+            j += 1;
         }
+        index += 1;
     }
-    swap(arr[i], arr[high]);
-    return i;
+
+    if (i < l1) {
+        memcpy(&arr[index], &larr[i], sizeof (int) * (l1 - i));
+    }
+    if (j < l2) {
+        memcpy(&arr[index], &rarr[j], sizeof (int) * (l2 - j));
+    }
 }
 
 
-void quick_sort(int* nums, int low, int high) {
-    if (low >= high) {
+void merge_sort(int* arr, int left, int right) {
+    if (left >= right) {
         return;
     }
-    
-    int pivot = partition(nums, low, high);
-    quick_sort(nums, low, pivot - 1);
-    quick_sort(nums, pivot + 1, high);
+
+    int mid = left + ((right - left) >> 1);
+    merge_sort(arr, left, mid);
+    merge_sort(arr, mid + 1, right);
+
+    merge(arr, left, mid, right);
 }
 
 
@@ -40,13 +53,13 @@ int* sortArray(int* nums, int numsSize, int* returnSize) {
     *returnSize = numsSize;
     int* res = malloc(sizeof (int) * numsSize);
     memcpy(res, nums, sizeof (int) * numsSize);
-    quick_sort(res, 0, numsSize - 1);
+    merge_sort(res, 0, numsSize - 1);
     return res;
 }
 
 
 int main(void) {
-    int nums[] = {5,2,3,1};
+    int nums[] = {3,4,5,1,2,1,1,4,5,1,4};
     int numSize = sizeof (nums) / sizeof (int);
     int* returnSize = malloc(sizeof (int));
 
