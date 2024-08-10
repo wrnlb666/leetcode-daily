@@ -1,11 +1,15 @@
-bin/
+bin/*
+Debug/
+!bin/*.dart
 obj/
 .*
+!.gitignore
 *.exe
 *.o
 *.dll
 *.so
 *.a
 test
+!test/
 wrnlb
 compile_commands.json
