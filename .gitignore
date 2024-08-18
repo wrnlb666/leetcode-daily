@@ -11,5 +11,6 @@ obj/
 *.a
 test
 !test/
+*.jar
 wrnlb
 compile_commands.json
