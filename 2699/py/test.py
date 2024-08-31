@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Tuple
+import math
+import heapq
 
 
 class Solution:
-    INF = int(2e9)
-
     def modifiedGraphEdges(
         self,
         n: int,
@@ -12,59 +12,58 @@ class Solution:
         destination: int,
         target: int,
     ) -> List[List[int]]:
-        current_shortest_distance = self.run_dijkstra(
-            edges, n, source, destination
-        )
+        INF = int(2e9)
+        graph = [[] for _ in range(n)]
 
+        for u, v, w in edges:
+            if w != -1:
+                graph[u].append((v, w))
+                graph[v].append((u, w))
+
+        current_shortest_distance = self._dijkstra(graph, source, destination)
         if current_shortest_distance < target:
             return []
-        matches_target = current_shortest_distance == target
 
-        for edge in edges:
-            if edge[2] > 0:
+        if current_shortest_distance == target:
+            for edge in edges:
+                if edge[2] == -1:
+                    edge[2] = INF
+            return edges
+
+        for i, (u, v, w) in enumerate(edges):
+            if w != -1:
                 continue
 
-            edge[2] = self.INF if matches_target else 1
+            edges[i][2] = 1
+            graph[u].append((v, 1))
+            graph[v].append((u, 1))
 
-            if not matches_target:
-                new_distance = self.run_dijkstra(edges, n, source, destination)
-                if new_distance <= target:
-                    matches_target = True
-                    edge[2] += target - new_distance
+            new_distance = self._dijkstra(graph, source, destination)
 
-        return edges if matches_target else []
+            if new_distance <= target:
+                edges[i][2] += target - new_distance
 
-    def run_dijkstra(
-        self, edges: List[List[int]], n: int, source: int, destination: int
+                for j in range(i + 1, len(edges)):
+                    if edges[j][2] == -1:
+                        edges[j][2] = INF
+                return edges
+        return []
+
+    def _dijkstra(
+        self, graph: List[List[Tuple[int, int]]], src: int, destination: int
     ) -> int:
-        adj_matrix = [[self.INF] * n for _ in range(n)]
-        min_distance = [self.INF] * n
-        visited = [False] * n
+        min_distance = [math.inf] * len(graph)
+        min_distance[src] = 0
+        min_heap = [(0, src)]
 
-        min_distance[source] = 0
-
-        for nodeA, nodeB, weight in edges:
-            if weight != -1:
-                adj_matrix[nodeA][nodeB] = weight
-                adj_matrix[nodeB][nodeA] = weight
-
-        for _ in range(n):
-            nearest_unvisited_node = -1
-            for i in range(n):
-                if not visited[i] and (
-                    nearest_unvisited_node == -1
-                    or min_distance[i] < min_distance[nearest_unvisited_node]
-                ):
-                    nearest_unvisited_node = i
-
-            visited[nearest_unvisited_node] = True
-
-            for v in range(n):
-                min_distance[v] = min(
-                    min_distance[v],
-                    min_distance[nearest_unvisited_node]
-                    + adj_matrix[nearest_unvisited_node][v],
-                )
+        while min_heap:
+            d, u = heapq.heappop(min_heap)
+            if d > min_distance[u]:
+                continue
+            for v, w in graph[u]:
+                if d + w < min_distance[v]:
+                    min_distance[v] = d + w
+                    heapq.heappush(min_heap, (min_distance[v], v))
         return min_distance[destination]
 
 
