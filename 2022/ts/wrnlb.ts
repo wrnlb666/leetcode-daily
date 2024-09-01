@@ -4,11 +4,7 @@ function construct2DArray(original: number[], m: number, n: number): number[][] 
     }
     let res: number[][] = []
     for (let i = 0; i < m; i++) {
-        let row: number[] = []
-        for (let j = 0; j < n; j++) {
-            row.push(original[i * n + j])
-        }
-        res.push(row)
+        res.push(original.slice(i * n, i * n + n))
     }
     return res
 }
