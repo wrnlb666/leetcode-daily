@@ -5,7 +5,7 @@ function getLucky(s: string, k: number): number {
         if (num < 10) {
             sum += num
         } else {
-            sum += Math.floor(num / 10)
+            sum += ~~(num / 10)
             sum += num % 10
         }
     }
@@ -13,7 +13,7 @@ function getLucky(s: string, k: number): number {
         let newSum = 0
         while (sum > 0) {
             newSum += sum % 10
-            sum = Math.floor(sum / 10)
+            sum = ~~(sum / 10)
         }
         sum = newSum
     }
@@ -22,7 +22,7 @@ function getLucky(s: string, k: number): number {
 
 
 (() => {
-    const s: string = "zbax"
+    const s: string = "leetcode"
     const k: number = 2
     const res: number = getLucky(s, k)
     console.log(res)
