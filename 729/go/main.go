@@ -52,6 +52,9 @@ func (this *MyCalendar) Book(start int, end int) bool {
                     end: end,
                 }
                 return true
+            } else {
+                node = node.right
+                continue
             }
         } else {
             return false
