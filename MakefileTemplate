@@ -1,5 +1,5 @@
 CC = gcc
-CFLAG = -Wall -Wextra -std=gnu17 -g -fsanitize=leak,bounds,address
+CFLAG = -Wall -Wextra -std=c2x -g -fsanitize=leak,bounds,address
 
 all: test
 
