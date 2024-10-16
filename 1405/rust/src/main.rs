@@ -53,7 +53,7 @@ impl Solution {
                         break;
                     }
                 }
-            } else if c >= a && c >= b && c > 0{
+            } else if c >= a && c >= b && c > 0 {
                 if curr_c < 2 {
                     res.push(b'c');
                     c -= 1;
