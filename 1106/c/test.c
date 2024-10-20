@@ -3,24 +3,15 @@
 #include <stdbool.h>
 
 
-#define print(...) printf(__VA_ARGS__); fflush(stdout);
-
-
 void short_circut(char* expr, size_t* i) {
     int left = 1;
     for (;;) {
-        /*print("%zu: %c\n", *i, expr[*i]);*/
-        switch (expr[*i]) {
-            case '(': {
-                left += 1;
-            } break;
-            case ')': {
-                left -= 1;
-                if (left == 0) {
-                    return;
-                }
-            } break;
-            default: {
+        if (expr[*i] == '(') {
+            left += 1;
+        } else if (expr[*i] == ')') {
+            left -= 1;
+            if (left == 0) {
+                return;
             }
         }
         *i += 1;
@@ -30,10 +21,8 @@ void short_circut(char* expr, size_t* i) {
 
 bool parse(char* expr, size_t* i) {
     if (expr[*i] == 't') {
-        /**i += 1;*/
         return true;
     } else if (expr[*i] == 'f') {
-        /**i += 1;*/
         return false;
     }
 
@@ -47,15 +36,10 @@ bool parse(char* expr, size_t* i) {
         case '&': {
             *i += 2;
             for (; expr[*i] != ')'; *i += 1) {
-                switch (expr[*i]) {
-                    case ',': {
-                        continue;
-                    } break;
-                    default: {
-                        if (parse(expr, i) == false) {
-                            short_circut(expr, i);
-                            return false;
-                        }
+                if (expr[*i] != ',') {
+                    if (parse(expr, i) == false) {
+                        short_circut(expr, i);
+                        return false;
                     }
                 }
             }
@@ -64,15 +48,10 @@ bool parse(char* expr, size_t* i) {
         case '|': {
             *i += 2;
             for (; expr[*i] != ')'; *i += 1) {
-                switch (expr[*i]) {
-                    case ',': {
-                        continue;
-                    } break;
-                    default: {
-                        if (parse(expr, i) == true) {
-                            short_circut(expr, i);
-                            return true;
-                        }
+                if (expr[*i] != ',') {
+                    if (parse(expr, i) == true) {
+                        short_circut(expr, i);
+                        return true;
                     }
                 }
             }
