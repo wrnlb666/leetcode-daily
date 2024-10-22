@@ -19,16 +19,16 @@ class TreeNode:
         nodes.append(self)
         while len(nodes) != 0:
             curr: Optional[Self] = nodes.popleft()
-            if curr == None:
+            if curr is None:
                 res.append("null")
                 continue
             res.append(curr.val)
-            if curr.left != None:
+            if curr.left is not None:
                 nodes.append(curr.left)
-                if curr.right == None:
+                if curr.right is None:
                     nodes.append(None)
-            if curr.right != None:
-                if curr.left == None:
+            if curr.right is not None:
+                if curr.left is None:
                     nodes.append(None)
                 nodes.append(curr.right)
         while res[-1] == "null":
@@ -39,17 +39,17 @@ class TreeNode:
         return self.__repr__()
 
     @classmethod
-    def from_list(cls, l: List[Optional[int]]) -> Self:
-        first: Optional[int] = l.pop(0)
+    def from_list(cls, li: List[Optional[int]]) -> Self:
+        first: Optional[int] = li.pop(0)
         if not first:
             return cls()
         root: Self = cls(first)
         queue: Deque[Self] = deque([root])
-        while l:
-            left: Optional[int] = l.pop(0)
+        while li:
+            left: Optional[int] = li.pop(0)
             right: Optional[int] = None
-            if l:
-                right = l.pop(0)
+            if li:
+                right = li.pop(0)
             parent: Self = queue.popleft()
 
             if left:
