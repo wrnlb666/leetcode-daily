@@ -3,16 +3,14 @@ struct Solution {}
 
 impl Solution {
     pub fn get_maximum_xor(nums: Vec<i32>, maximum_bit: i32) -> Vec<i32> {
-        let prefix: Vec<i32> = nums
+        let mask: i32 = (1 << maximum_bit) - 1;
+        return nums
             .into_iter()
             .scan(0, |curr, n| {
                 *curr ^= n;
                 Some(*curr)
             })
-            .collect();
-
-        let mask: i32 = (1 << maximum_bit) - 1;
-        return prefix
+            .collect::<Vec<i32>>()
             .into_iter()
             .rev()
             .map(|n| {
