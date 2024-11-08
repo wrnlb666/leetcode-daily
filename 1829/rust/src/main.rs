@@ -11,23 +11,14 @@ impl Solution {
             })
             .collect();
 
-        prefix
+        let mask: i32 = (1 << maximum_bit) - 1;
+        return prefix
             .into_iter()
             .rev()
             .map(|n| {
-                Self::get_num(n, maximum_bit)
+                n ^ mask
             })
-            .collect()
-    }
-
-    fn get_num(n: i32, b: i32) -> i32 {
-        let mut res: i32 = 0;
-        for i in 0..b {
-            if (n & (1 << i)) == 0 {
-                res |= 1 << i;
-            }
-        }
-        return res;
+            .collect();
     }
 }
 
