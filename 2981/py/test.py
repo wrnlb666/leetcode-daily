@@ -41,7 +41,7 @@ class Solution:
                         res = max(res, c1-2)
                     continue
                 if c1 == c2:
-                    if c1 > 2:
+                    if c1 > 1:
                         res = max(res, c1-1)
                     continue
                 if c1 == c2+1:
@@ -56,7 +56,7 @@ class Solution:
                         res = max(res, c1-2)
                     continue
                 if c1 == c2 and c2 != c3:
-                    if c1 > 2:
+                    if c1 > 1:
                         res = max(res, c1-1)
                     continue
                 if c1 == c2+1:
