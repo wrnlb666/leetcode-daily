@@ -1,9 +1,12 @@
-from typing import List
+from typing import List, Tuple, Dict
 
 
 class Solution:
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        cache: Dict[Tuple[int, int], int] = dict()
         def dfs(nums_slice: List[int], index: int, curr_sum: int, target: int) -> int:
+            if (index, curr_sum) in cache:
+                return cache[(index, curr_sum)]
             res: int = 0
             if index == len(nums_slice):
                 if curr_sum == target:
@@ -13,6 +16,7 @@ class Solution:
             curr: int = nums_slice[index]
             res += dfs(nums_slice, index + 1, curr_sum + curr, target)
             res += dfs(nums_slice, index + 1, curr_sum - curr, target)
+            cache[(index, curr_sum)] = res
             return res
         return dfs(nums, 0, 0, target)
 
