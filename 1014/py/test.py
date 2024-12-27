@@ -1,17 +1,20 @@
-from typing import List, Tuple
+from typing import List
 
 
 class Solution:
     def maxScoreSightseeingPair(self, values: List[int]) -> int:
-        table: List[Tuple[int, int]] = [(i, 0) for i in values]
-        for i, v in enumerate(values):
-            if i == 0:
-                continue
-            for j in range(i):
-                num, val = table[j]
-                val = max(val, num + values[i] + j - i)
-                table[j] = (num, val)
-        return max(list(zip(*table))[1])
+        table: List[int] = [0 for _ in values]
+        table[0] = values[0]
+        res: int = 0
+
+        for i in range(1, len(values)):
+            curr_right: int = values[i] - i
+            res = max(res, table[i-1] + curr_right)
+            curr_left: int = values[i] + i
+            table[i] = max(table[i-1], curr_left)
+
+        return res
+
 
 
 def main() -> None:
