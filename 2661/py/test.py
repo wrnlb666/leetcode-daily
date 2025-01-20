@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 
 class Solution:
@@ -7,41 +7,23 @@ class Solution:
         n: int = len(mat[0])
         rm: List[int] = [n] * m
         rn: List[int] = [m] * n
-        map: List[Tuple[int, int]] = list()
-        index: int = 0
-        for row in mat:
-            for v in row:
-                map.append((v, index))
-                index += 1
-        map.sort()
-        print(map)
-        print(arr)
+        i2n: List[int] = [0] * (m * n +1)
+        i2m: List[int] = [0] * (m * n + 1)
 
-        def bs(v: int) -> int:
-            left: int = 0
-            right: int = len(map)
-            while left < right:
-                mid: int = (left + right) // 2
-                if v == map[mid][0]:
-                    return map[mid][1]
-                if v < map[mid][0]:
-                    right = mid
-                elif v > map[mid][0]:
-                    left = mid
-            return -1
+        for i, row in enumerate(mat):
+            for j, v in enumerate(row):
+                i2m[v] = i
+                i2n[v] = j
 
-        def check(index: int) -> bool:
-            r: int = index // n
-            c: int = index % n
-            print(index, r, c)
-            rm[r] -= 1
-            rn[c] -= 1
-            if rm[r] == 0 or rn[c] == 0:
+        def check(m: int, n: int) -> bool:
+            rm[m] -= 1
+            rn[n] -= 1
+            if rm[m] == 0 or rn[n] == 0:
                 return True
             return False
 
         for i, v in enumerate(arr):
-            if check(bs(v)):
+            if check(i2m[v], i2n[v]):
                 return i
         return -1
 
