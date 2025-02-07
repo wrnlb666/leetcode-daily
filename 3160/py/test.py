@@ -6,15 +6,13 @@ class Solution:
     def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:
         res: List[int] = list()
         map: Dict[int, int] = defaultdict(int)
-        cache: List[int] = [0] * (limit + 1)
+        cache: Dict[int, int] = dict()
 
         for i in range(len(queries)):
             ball, color = queries[i]
-
-            if cache[ball] != 0:
+            if ball in cache:
                 prev = cache[ball]
                 map[prev] -= 1
-
                 if map[prev] == 0:
                     del map[prev]
 
