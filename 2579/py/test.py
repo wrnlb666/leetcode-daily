@@ -1,11 +1,6 @@
 class Solution:
     def coloredCells(self, n: int) -> int:
-        res: int = 1
-        n = n - 1
-        while n != 0:
-            res = res + n * 4
-            n = n - 1
-        return res
+        return 2 * n * (n-1) + 1
 
 
 def main() -> None:
