@@ -4,19 +4,13 @@ from typing import List
 class Solution:
     def minZeroArray(self, nums: List[int], queries: List[List[int]]) -> int:
         res: int = 0
-        for n in nums:
-            if n > 0:
-                break
-        else:
+        if not any(nums):
             return res
         for s, e, v in queries:
             for i in range(s, e+1):
-                nums[i] -= v
+                nums[i] -= min(v, nums[i])
             res += 1
-            for n in nums:
-                if n > 0:
-                    break
-            else:
+            if not any(nums):
                 return res
         return -1
 
