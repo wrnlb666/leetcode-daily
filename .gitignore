@@ -4,6 +4,7 @@ target/
 !bin/*.dart
 obj/
 .*
+!.clang-format
 !.gitignore
 *.exe
 *.o
