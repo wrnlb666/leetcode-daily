@@ -25,7 +25,7 @@ class UnionFind:
         return r
 
     def cmp(self, n1: int, n2: int) -> bool:
-        return self._find(n1) == self._find(n2)
+        return self.find(n1) == self.find(n2)
 
     def union(self, n1: int, n2: int) -> None:
         r1: int = self._find(n1)
@@ -52,15 +52,15 @@ class Solution:
             root = uf.find(n1)
             costs[root] &= w
 
-        answer: List[int] = list()
+        res: List[int] = list()
         for n1, n2 in queries:
             if not uf.cmp(n1, n2):
-                answer.append(-1)
+                res.append(-1)
             else:
                 root = uf.find(n1)
-                answer.append(costs[root])
+                res.append(costs[root])
 
-        return answer
+        return res
 
 
 def main() -> None:
