@@ -8,7 +8,12 @@ class ListNode:
         self.next = next
 
     def __repr__(self) -> str:
-        return str(self.val)
+        curr: Self | None = self
+        res: list[int] = []
+        while curr:
+            res.append(curr.val)
+            curr = curr.next
+        return str(res)
 
     @classmethod
     def from_list(cls, nums: list[int]) -> Self | None:
