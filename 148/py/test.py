@@ -28,24 +28,39 @@ class ListNode:
 
 class Solution:
     def sortList(self, head: ListNode | None) -> ListNode | None:
-        if not head:
-            return None
+        def sort(head: ListNode | None, tail: ListNode | None) -> ListNode | None:
+            if not head:
+                return head
+            if head.next == tail:
+                head.next = None
+                return head
+            slow = fast = head
+            while fast != tail:
+                slow = slow.next
+                fast = fast.next
+                if fast != tail:
+                    fast = fast.next
+            mid = slow
+            return merge(sort(head, mid), sort(mid, tail))
 
-        lst: list[int] = []
-        curr: ListNode | None = head
-        while curr:
-            lst.append(curr.val)
-            curr = curr.next
+        def merge(left: ListNode | None, right: ListNode | None) -> ListNode | None:
+            res = ListNode(0)
+            curr, cl, cr = res, left, right
+            while cl and cr:
+                if cl.val <= cr.val:
+                    curr.next = cl
+                    cl = cl.next
+                else:
+                    curr.next = cr
+                    cr = cr.next
+                curr = curr.next
+            if cl:
+                curr.next = cl
+            elif cr:
+                curr.next = cr
+            return res.next
 
-        lst.sort()
-
-        res: ListNode = ListNode()
-        curr = res
-        for n in lst:
-            curr.next = ListNode(n)
-            curr = curr.next
-
-        return res.next
+        return sort(head, None)
 
 
 head = [-1, 5, 3, 4, 0]
