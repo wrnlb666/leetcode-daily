@@ -1,24 +1,27 @@
-from typing import Optional, Self, List, Deque
+from typing import Self
 from collections import deque
 
 
 null: None = None
+
+
 class TreeNode:
-    def __init__(self,
-                 val: int = 0,
-                 left: Optional[Self] = None,
-                 right: Optional[Self] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        val: int = 0,
+        left: Self | None = None,
+        right: Self | None = None,
+    ) -> None:
         self.val = val
         self.left = left
         self.right = right
 
     def __repr__(self) -> str:
-        res: List[int | str] = []
-        nodes: Deque[Optional[Self]] = deque()
+        res: list[int | str] = []
+        nodes: deque[Self | None] = deque()
         nodes.append(self)
         while len(nodes) != 0:
-            curr: Optional[Self] = nodes.popleft()
+            curr: Self | None = nodes.popleft()
             if curr is None:
                 res.append("null")
                 continue
@@ -39,15 +42,15 @@ class TreeNode:
         return self.__repr__()
 
     @classmethod
-    def from_list(cls, li: List[Optional[int]]) -> Self:
-        first: Optional[int] = li.pop(0)
+    def from_list(cls, li: list[int | None]) -> Self:
+        first: int | None = li.pop(0)
         if not first:
             return cls()
         root: Self = cls(first)
-        queue: Deque[Self] = deque([root])
+        queue: deque[Self] = deque([root])
         while li:
-            left: Optional[int] = li.pop(0)
-            right: Optional[int] = None
+            left: int | None = li.pop(0)
+            right: int | None = None
             if li:
                 right = li.pop(0)
             parent: Self = queue.popleft()
@@ -61,6 +64,3 @@ class TreeNode:
                 parent.right = node
                 queue.append(node)
         return root
-
-
-
