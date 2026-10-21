@@ -68,19 +68,21 @@ class TreeNode:
 
 class Solution:
     def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode | None:
-        if not preorder:
-            return None
-        if len(preorder) == 1:
-            return TreeNode(preorder[0])
-        root: int = preorder[0]
-        im: int = inorder.index(root)
-        in_left = inorder[:im]
-        in_right = inorder[im + 1 :]
-        pre_left = preorder[1 : im + 1]
-        pre_right = preorder[im + 1 :]
-        left = self.buildTree(pre_left, in_left)
-        right = self.buildTree(pre_right, in_right)
-        return TreeNode(root, left, right)
+        idx_map = {val: i for i, val in enumerate(inorder)}
+
+        def build(pre_l: int, pre_r: int, in_l: int, in_r: int) -> TreeNode | None:
+            if pre_l > pre_r:
+                return None
+
+            root_val = preorder[pre_l]
+            root = TreeNode(root_val)
+            mid = idx_map[root_val]
+            left_size = mid - in_l
+            root.left = build(pre_l + 1, pre_l + left_size, in_l, mid - 1)
+            root.right = build(pre_l + left_size + 1, pre_r, mid + 1, in_r)
+            return root
+
+        return build(0, len(preorder) - 1, 0, len(inorder) - 1)
 
 
 preorder = [3, 9, 20, 15, 7]
