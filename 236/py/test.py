@@ -67,22 +67,20 @@ class TreeNode:
 
 
 class Solution:
-    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode | None:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
         target: set[int] = {p.val, q.val}
-        res: TreeNode | None = None
-        def dfs(root: TreeNode) -> int:
-            nonlocal res, target
-            met: int = 0
-            if root.val in target:
-                met += 1
-            if root.left and not res:
-                met += dfs(root.left)
-            if root.right and not res:
-                met += dfs(root.right)
-            if met == 2 and not res:
-                res = root
-            return met
-        if not root:
-            return res
-        dfs(root)
-        return res
+        def dfs(root: TreeNode) -> TreeNode | None:
+            left = right = None
+            if root.left:
+                left = dfs(root.left)
+            if root.right:
+                right = dfs(root.right)
+            if root.val in target or (left and right):
+                return root
+            if left:
+                return left
+            if right:
+                return right
+            return None
+        res = dfs(root)
+        return res if res else root
