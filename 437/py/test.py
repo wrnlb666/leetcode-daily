@@ -75,21 +75,21 @@ class Solution:
         if not root:
             return res
 
-        def dfs(root: TreeNode, curr: int, prefix: Counter[int]) -> None:
+        def dfs(root: TreeNode, curr: int) -> None:
             nonlocal res, targetSum
             new_sum = curr + root.val
             if new_sum - targetSum in prefix:
                 res += prefix[new_sum - targetSum]
-            new_prefix = prefix.copy()
-            new_prefix[new_sum] += 1
+            prefix[new_sum] += 1
             if root.left:
-                dfs(root.left, new_sum, new_prefix)
+                dfs(root.left, new_sum)
             if root.right:
-                dfs(root.right, new_sum, new_prefix)
+                dfs(root.right, new_sum)
+            prefix[new_sum] -= 1
 
         prefix: Counter[int] = Counter()
         prefix[0] += 1
-        dfs(root, 0, prefix)
+        dfs(root, 0)
         return res
 
 
