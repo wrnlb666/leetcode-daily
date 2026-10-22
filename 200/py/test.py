@@ -1,37 +1,55 @@
+class UnionFind:
+    grid: list[list[str]]
+    parents: list[int]
+    count: int
+    row: int
+    col: int
+
+    def __init__(self, grid: list[list[str]]) -> None:
+        self.grid = grid
+        self.row = len(grid)
+        self.col = len(grid[0])
+        self.count = 0
+        self.parents = [i for i in range(self.row * self.col)]
+        for row in grid:
+            for i in row:
+                if i == "1":
+                    self.count += 1
+
+    def __len__(self) -> int:
+        return self.count
+
+    def get_index(self, row: int, col: int) -> int:
+        return self.col * row + col
+
+    def find(self, index: int) -> int:
+        if self.parents[index] != index:
+            self.parents[index] = self.find(self.parents[index])
+        return self.parents[index]
+
+    def union(self, a: int, b: int) -> bool:
+        ra, rb = self.find(a), self.find(b)
+        if ra == rb:
+            return False
+        self.parents[rb] = self.parents[ra]
+        self.count -= 1
+        return True
+
+
 class Solution:
     def numIslands(self, grid: list[list[str]]) -> int:
-        parents: list[int] = [i for i in range(len(grid) * len(grid[0]))]
-
-        def get_index(row: int, col: int) -> int:
-            return len(grid[0]) * row + col
-
-        def get_val(index: int) -> bool:
-            row: int = index // len(grid[0])
-            col: int = index % len(grid[0])
-            return grid[row][col] == "1"
-
-        def find(index: int) -> int:
-            if parents[index] != index:
-                parents[index] = find(parents[index])
-            return parents[index]
-
-        def union(a: int, b: int) -> bool:
-            ra, rb = find(a), find(b)
-            if ra == rb:
-                return False
-            parents[ra] = rb
-            return True
+        uf: UnionFind = UnionFind(grid)
 
         for i, row in enumerate(grid):
             for j, item in enumerate(row):
                 if item == "0":
                     continue
                 if i != 0 and grid[i - 1][j] == "1":
-                    union(get_index(i - 1, j), get_index(i, j))
+                    uf.union(uf.get_index(i - 1, j), uf.get_index(i, j))
                 if j != 0 and row[j - 1] == "1":
-                    union(get_index(i, j - 1), get_index(i, j))
+                    uf.union(uf.get_index(i, j - 1), uf.get_index(i, j))
 
-        return sum([i == v and get_val(i) for i, v in enumerate(parents)])
+        return len(uf)
 
 
 grid = [
