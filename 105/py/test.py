@@ -17,26 +17,27 @@ class TreeNode:
         self.right = right
 
     def __repr__(self) -> str:
-        res: list[int | str] = []
-        nodes: deque[Self | None] = deque()
-        nodes.append(self)
+        res: list[str] = []
+        nodes: list[Self | None] = [self]
         while len(nodes) != 0:
-            curr: Self | None = nodes.popleft()
-            if curr is None:
-                res.append("null")
-                continue
-            res.append(curr.val)
-            if curr.left is not None:
-                nodes.append(curr.left)
-                if curr.right is None:
-                    nodes.append(None)
-            if curr.right is not None:
-                if curr.left is None:
-                    nodes.append(None)
-                nodes.append(curr.right)
+            new_nodes: list[Self | None] = []
+            for curr in nodes:
+                if curr is None:
+                    res.append("null")
+                    continue
+                res.append(str(curr.val))
+                if curr.left:
+                    new_nodes.append(curr.left)
+                else:
+                    new_nodes.append(None)
+                if curr.right:
+                    new_nodes.append(curr.right)
+                else:
+                    new_nodes.append(None)
+            nodes = new_nodes
         while res[-1] == "null":
             res.pop(-1)
-        return str(res)
+        return f"[ {', '.join(res)} ]"
 
     def __str__(self) -> str:
         return self.__repr__()
