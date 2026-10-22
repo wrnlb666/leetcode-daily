@@ -1,5 +1,4 @@
 from typing import Self
-from collections import deque
 
 
 null: None = None
@@ -17,26 +16,27 @@ class TreeNode:
         self.right = right
 
     def __repr__(self) -> str:
-        res: list[int | str] = []
-        nodes: deque[Self | None] = deque()
-        nodes.append(self)
+        res: list[str] = []
+        nodes: list[Self | None] = [self]
         while len(nodes) != 0:
-            curr: Self | None = nodes.popleft()
-            if curr is None:
-                res.append("null")
-                continue
-            res.append(curr.val)
-            if curr.left is not None:
-                nodes.append(curr.left)
-                if curr.right is None:
-                    nodes.append(None)
-            if curr.right is not None:
-                if curr.left is None:
-                    nodes.append(None)
-                nodes.append(curr.right)
+            new_nodes: list[Self | None] = []
+            for curr in nodes:
+                if curr is None:
+                    res.append("null")
+                    continue
+                res.append(str(curr.val))
+                if curr.left:
+                    new_nodes.append(curr.left)
+                else:
+                    new_nodes.append(None)
+                if curr.right:
+                    new_nodes.append(curr.right)
+                else:
+                    new_nodes.append(None)
+            nodes = new_nodes
         while res[-1] == "null":
             res.pop(-1)
-        return str(res)
+        return f"[ {', '.join(res)} ]"
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -47,22 +47,22 @@ class TreeNode:
         if not first:
             return cls()
         root: Self = cls(first)
-        queue: deque[Self] = deque([root])
+        nodes: list[Self] = [root]
         while li:
             left: int | None = li.pop(0)
             right: int | None = None
             if li:
                 right = li.pop(0)
-            parent: Self = queue.popleft()
+            parent: Self = nodes.pop(0)
 
             if left:
                 node: Self = cls(left)
                 parent.left = node
-                queue.append(node)
+                nodes.append(node)
             if right:
                 node: Self = cls(right)
                 parent.right = node
-                queue.append(node)
+                nodes.append(node)
         return root
 
 
@@ -83,7 +83,7 @@ class Solution:
                 dfs(root.left)
             if root.right:
                 dfs(root.right)
-        
+
         dfs(root)
         curr = root
         for node in li[1:]:
@@ -91,3 +91,9 @@ class Solution:
             curr.right = node
             curr = node
         curr.left = curr.right = None
+
+
+root = [1, 2, 5, 3, 4, null, 6]
+root = TreeNode.from_list(root)
+Solution().flatten(root)
+print(root)

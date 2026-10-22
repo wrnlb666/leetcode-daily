@@ -1,5 +1,4 @@
 from typing import Self
-from collections import deque
 
 
 null: None = None
@@ -48,23 +47,20 @@ class TreeNode:
         if not first:
             return cls()
         root: Self = cls(first)
-        queue: deque[Self] = deque([root])
+        nodes: list[Self] = [root]
         while li:
             left: int | None = li.pop(0)
             right: int | None = None
             if li:
                 right = li.pop(0)
-            parent: Self = queue.popleft()
+            parent: Self = nodes.pop(0)
 
             if left:
                 node: Self = cls(left)
                 parent.left = node
-                queue.append(node)
+                nodes.append(node)
             if right:
                 node: Self = cls(right)
                 parent.right = node
-                queue.append(node)
+                nodes.append(node)
         return root
-
-
-
