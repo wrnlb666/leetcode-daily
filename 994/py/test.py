@@ -10,28 +10,24 @@ class Solution:
                 if n == 2:
                     queue.append((i, j))
 
+        dirs: list[tuple[int, int]] = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
         while queue and remaining != 0:
             new_queue: list[tuple[int, int]] = []
             res += 1
 
             for rotted in queue:
                 r, c = rotted
-                if r != 0 and grid[r - 1][c] == 1:
-                    grid[r - 1][c] = 2
-                    remaining -= 1
-                    new_queue.append((r - 1, c))
-                if r != len(grid) - 1 and grid[r + 1][c] == 1:
-                    grid[r + 1][c] = 2
-                    remaining -= 1
-                    new_queue.append((r + 1, c))
-                if c != 0 and grid[r][c - 1] == 1:
-                    grid[r][c - 1] = 2
-                    remaining -= 1
-                    new_queue.append((r, c - 1))
-                if c != len(grid[0]) - 1 and grid[r][c + 1] == 1:
-                    grid[r][c + 1] = 2
-                    remaining -= 1
-                    new_queue.append((r, c + 1))
+                for dr, dc in dirs:
+                    nr, nc = r + dr, c + dc
+                    if (
+                        0 <= nr < len(grid)
+                        and 0 <= nc < len(grid[0])
+                        and grid[nr][nc] == 1
+                    ):
+                        grid[nr][nc] = 2
+                        new_queue.append((nr, nc))
+                        remaining -= 1
 
             queue = new_queue
 
