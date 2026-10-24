@@ -1,25 +1,14 @@
 class Solution:
     def subsets(self, nums: list[int]) -> list[list[int]]:
-        def rec(nums: tuple[int, ...]) -> set[tuple[int, ...]]:
-            res: set[tuple[int, ...]] = set()
+        res: set[tuple[int, ...]] = set()
 
-            if len(nums) <= 1:
-                return {tuple(nums)}
-
+        def dfs(nums: tuple[int, ...]) -> None:
+            res.add(nums)
             for i in range(len(nums)):
-                left = nums[:i]
-                right = nums[i + 1 :]
-                curr = left + right
-                res.add(curr)
-                res = res.union(rec(curr))
+                dfs(nums[:i] + nums[i + 1 :])
 
-            return res
-
-        sets = rec(tuple(nums))
-        sets.add(())
-        sets.add(tuple(nums))
-        res = [list(x) for x in sets]
-        return res
+        dfs(tuple(nums))
+        return [list(x) for x in res]
 
 
 nums = [1, 2, 3]
