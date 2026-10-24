@@ -1,14 +1,17 @@
 class Solution:
     def subsets(self, nums: list[int]) -> list[list[int]]:
-        res: set[tuple[int, ...]] = set()
+        res: list[list[int]] = []
+        path: list[int] = []
 
-        def dfs(nums: tuple[int, ...]) -> None:
-            res.add(nums)
-            for i in range(len(nums)):
-                dfs(nums[:i] + nums[i + 1 :])
+        def dfs(start: int = 0) -> None:
+            res.append(path[:])
+            for i in range(start, len(nums)):
+                path.append(nums[i])
+                dfs(i + 1)
+                path.pop()
 
-        dfs(tuple(nums))
-        return [list(x) for x in res]
+        dfs()
+        return res
 
 
 nums = [1, 2, 3]
