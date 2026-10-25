@@ -1,7 +1,19 @@
+from collections import Counter
+
+
 class Solution:
     def exist(self, board: list[list[str]], word: str) -> bool:
         dirs: list[tuple[int, int]] = [(-1, 0), (1, 0), (0, 1), (0, -1)]
         used: set[tuple[int, int]] = set()
+
+        total: dict[str, int] = Counter()
+        needed: dict[str, int] = Counter(word)
+        for row in board:
+            for ch in row:
+                total[ch] += 1
+        for ch, count in needed.items():
+            if total[ch] < count:
+                return False
 
         def dfs(row: int, col: int, index: int) -> bool:
             if index == len(word) - 1:
