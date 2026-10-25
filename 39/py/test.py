@@ -1,10 +1,9 @@
 class Solution:
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
         res: list[list[int]] = []
-        total: int = 0
+        path: list[int] = []
 
-        def dfs(path: list[int], start: int) -> None:
-            nonlocal total
+        def dfs(total: int, start: int) -> None:
             if total == target:
                 res.append(path[:])
                 return
@@ -14,11 +13,11 @@ class Solution:
                 can = candidates[i]
                 total += can
                 path.append(can)
-                dfs(path, i)
+                dfs(total, i)
                 total -= can
                 path.pop()
 
-        dfs([], 0)
+        dfs(0, 0)
         return res
 
 
