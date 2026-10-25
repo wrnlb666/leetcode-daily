@@ -4,9 +4,6 @@ class Solution:
         used: set[tuple[int, int]] = set()
 
         def dfs(row: int, col: int, index: int) -> bool:
-            if board[row][col] != word[index]:
-                return False
-
             if index == len(word) - 1:
                 return True
 
@@ -15,6 +12,7 @@ class Solution:
                 if (
                     0 <= nr < len(board)
                     and 0 <= nc < len(board[0])
+                    and board[nr][nc] == word[index + 1]
                     and (nr, nc) not in used
                 ):
                     used.add((nr, nc))
@@ -26,10 +24,11 @@ class Solution:
 
         for i, row in enumerate(board):
             for j, ch in enumerate(row):
-                used.add((i, j))
-                if dfs(i, j, 0):
-                    return True
-                used.remove((i, j))
+                if ch == word[0]:
+                    used.add((i, j))
+                    if dfs(i, j, 0):
+                        return True
+                    used.remove((i, j))
         return False
 
 
