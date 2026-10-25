@@ -16,6 +16,9 @@ class Solution:
         if total[word[0]] > total[word[-1]]:
             word = word[::-1]
 
+        del total
+        del needed
+
         def dfs(row: int, col: int, index: int) -> bool:
             if index == len(word) - 1:
                 return True
