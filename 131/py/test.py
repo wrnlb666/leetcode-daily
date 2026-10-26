@@ -1,18 +1,19 @@
 class Solution:
     def partition(self, s: str) -> list[list[str]]:
+        n: int = len(s)
         res: list[list[str]] = []
         path: list[str] = []
 
         def dfs(index: int) -> None:
-            if index == len(s):
+            if index == n:
                 res.append(path[:])
                 return
 
-            for i in range(index, len(s) + 1):
-                curr: str = s[index:i]
+            for i in range(index, n):
+                curr: str = s[index : i + 1]
                 if curr and curr == curr[::-1]:
                     path.append(curr)
-                    dfs(i)
+                    dfs(i + 1)
                     path.pop()
 
         dfs(0)
