@@ -1,37 +1,26 @@
-import heapq
-from collections import Counter
-
-
 class MinStack:
     stack: list[int]
-    pq: list[int]
-    deleted: Counter[int]
+    min_stack: list[int]
 
     def __init__(self):
         self.stack = []
-        self.pq = []
-        self.deleted = Counter()
+        self.min_stack = []
 
     def push(self, value: int) -> None:
         self.stack.append(value)
-        heapq.heappush(self.pq, value)
+        if not self.min_stack or value <= self.min_stack[-1]:
+            self.min_stack.append(value)
 
     def pop(self) -> None:
         n = self.stack.pop()
-        self.deleted[n] += 1
+        if n == self.min_stack[-1]:
+            self.min_stack.pop()
 
     def top(self) -> int:
         return self.stack[-1]
 
     def getMin(self) -> int:
-        while True:
-            n = self.deleted[self.pq[0]]
-            if not n:
-                break
-            for _ in range(n):
-                n = heapq.heappop(self.pq)
-                self.deleted[n] = 0
-        return self.pq[0]
+        return self.min_stack[-1]
 
 
 # Your MinStack object will be instantiated and called as such:
