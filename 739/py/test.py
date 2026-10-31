@@ -1,18 +1,18 @@
 class Solution:
     def dailyTemperatures(self, temperatures: list[int]) -> list[int]:
-        stack: list[int] = []
-        index: int = len(temperatures) - 1
-        highest: int = 0
-        while index >= 0:
-            curr: int = temperatures[index]
-            highest = max(highest, curr)
-            if curr >= highest or not stack:
-                temperatures[index] = 0
-            for i, v in enumerate(stack):
-                if v > curr:
-                    temperatures[index] = len(temperatures) - i - index - 1
-            stack.append(curr)
-            index -= 1
+        stack: list[tuple[int, int]] = []
+        i: int = 0
+        while i < len(temperatures):
+            curr: int = temperatures[i]
+            while stack and curr > stack[-1][0]:
+                _, index = stack.pop()
+                temperatures[index] = i - index
+
+            stack.append((curr, i))
+            i += 1
+
+        for _, i in stack:
+            temperatures[i] = 0
 
         return temperatures
 
